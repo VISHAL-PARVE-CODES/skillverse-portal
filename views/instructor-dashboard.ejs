@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillVerse - Instructor Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #121826;
+      min-height: 100vh;
+      color: #333333;
+    }
+
+    /* Top Instructor Navbar */
+    .top-navbar {
+      background-color: #1e2430;
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 45px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+    .brand-logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #007bff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: #ffffff;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-nav-profile {
+      background: white;
+      color: #1e2430;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-nav-logout {
+      background: transparent;
+      color: #ef4444;
+      border: 1px solid #ef4444;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-nav-logout:hover {
+      background: #ef4444;
+      color: white;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1050px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 30px 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      margin-bottom: 25px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: #007bff;
+    }
+
+    .btn-publish {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-publish:hover {
+      background-color: #0056b3;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+      font-size: 14.5px;
+      color: #1e293b;
+      padding: 12px 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    td {
+      padding: 14px 10px;
+      font-size: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <a href="/" class="brand-logo">
+        <i class="fa-solid fa-graduation-cap"></i> SkillVerse
+      </a>
+      <nav class="nav-links">
+        <a href="/instructor/dashboard" class="active"><i class="fa-solid fa-book"></i> Your Courses</a>
+        <a href="/instructor/dashboard"><i class="fa-solid fa-file-lines"></i> Courses Materials</a>
+        <a href="/instructor/dashboard"><i class="fa-solid fa-plus"></i> Create ▾</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <a href="/profile" class="btn-nav-profile"><i class="fa-solid fa-user"></i> Profile</a>
+      <a href="/login" class="btn-nav-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Welcome Header -->
+    <div class="card" style="padding: 20px 30px;">
+      <h3 style="font-size: 20px; color: #1e293b;">
+        👨‍🏫 Logged in as: <strong style="color: #007bff;"><%= instructor ? instructor.name : 'tulsi dhandhal' %></strong>
+      </h3>
+    </div>
+
+    <!-- Create Course Form -->
+    <div class="card">
+      <h2 class="card-title"><i class="fa-solid fa-circle-plus" style="color: #007bff;"></i> Create New Course</h2>
+      <form action="/instructor/add-course" method="POST">
+        <div class="form-group">
+          <label class="form-label">Course Title:</label>
+          <input type="text" name="title" class="form-control" placeholder="e.g. Complete Node.js Bootcamp" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price (₹):</label>
+          <input type="number" name="price" class="form-control" placeholder="499" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description:</label>
+          <textarea name="description" class="form-control" rows="3" placeholder="Course outline & summary..."></textarea>
+        </div>
+        <button type="submit" class="btn-publish"><i class="fa-solid fa-cloud-arrow-up"></i> Publish Course</button>
+      </form>
+    </div>
+
+    <!-- My Published Courses Table -->
+    <div class="card">
+      <h2 class="card-title"><i class="fa-solid fa-list-check" style="color: #007bff;"></i> My Published Courses</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50%;">Title</th>
+            <th style="width: 25%;">Price</th>
+            <th style="width: 25%;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (courses && courses.length > 0) { %>
+            <% courses.forEach(course => { %>
+              <tr>
+                <td><strong><%= course.title %></strong></td>
+                <td>₹<%= course.price %></td>
+                <td>
+                  <a href="/instructor/delete-course/<%= course._id %>" class="btn-delete" onclick="return confirm('Delete this course?')">Delete</a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="3" style="text-align: center; color: #64748b; padding: 20px;">No courses published yet.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</body>
+</html>

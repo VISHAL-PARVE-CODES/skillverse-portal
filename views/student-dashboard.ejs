@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SkillVerse - Student Dashboard</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+    body { background:#f8f9fa; }
+    .container { max-width:1100px; margin:30px auto; padding:0 20px; }
+    .card { background:white; padding:20px; border-radius:6px; margin-bottom:20px; box-shadow:0 2px 4px rgba(0,0,0,0.05); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px; }
+    .course-card { background:white; border-left:5px solid #007bff; border-radius:4px; padding:18px; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <%- include('header') %>
+  <div class="container">
+    <div class="card">
+      <h2>🎓 Student Dashboard</h2>
+      <p style="color:#666;">Welcome back, <strong><%= student.name %></strong> (<%= student.email %>)</p>
+    </div>
+    <h3>My Enrolled Courses</h3>
+    <div class="grid" style="margin-top:15px;">
+      <% if (student.enrolledCourses && student.enrolledCourses.length > 0) { %>
+        <% student.enrolledCourses.forEach(c => { %>
+          <div class="course-card">
+            <h4><%= c.title %></h4>
+            <p style="color:#666; font-size:14px; margin-top:5px;">Instructor: <%= c.instructor %></p>
+            <p style="font-size:13px; color:#444; margin:10px 0;"><%= c.description %></p>
+            <a href="#" style="display:inline-block; background:#007bff; color:white; text-decoration:none; padding:6px 12px; border-radius:4px; font-size:13px;">Start Learning</a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No enrolled courses yet. <a href="/">Browse & Enroll</a></p>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
