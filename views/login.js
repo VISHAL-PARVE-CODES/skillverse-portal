@@ -1,6 +1,11 @@
-module.exports = function(errorMsg = '') {
-  return `
-<!DOCTYPE html>
+module.exports = function(errorMsg) {
+  const errorHtml = errorMsg ? (
+    '<div class="error-banner">' +
+      '<i class="fa-solid fa-circle-exclamation"></i> ' + errorMsg +
+    '</div>'
+  ) : '';
+
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -32,7 +37,7 @@ module.exports = function(errorMsg = '') {
     }
 
     .brand-header {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       text-align: center;
     }
 
@@ -54,14 +59,14 @@ module.exports = function(errorMsg = '') {
     }
 
     .auth-card {
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 24px;
       width: 100%;
       max-width: 440px;
-      padding: 38px 34px;
+      padding: 36px 32px;
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
       position: relative;
     }
@@ -78,12 +83,12 @@ module.exports = function(errorMsg = '') {
 
     .card-top {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .icon-badge {
-      width: 56px;
-      height: 56px;
+      width: 54px;
+      height: 54px;
       background: rgba(16, 185, 129, 0.12);
       border: 1px solid rgba(16, 185, 129, 0.3);
       color: #34d399;
@@ -92,7 +97,7 @@ module.exports = function(errorMsg = '') {
       align-items: center;
       justify-content: center;
       font-size: 24px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .card-top h2 {
@@ -105,7 +110,7 @@ module.exports = function(errorMsg = '') {
     .card-top p {
       color: #94a3b8;
       font-size: 14px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .error-banner {
@@ -115,14 +120,14 @@ module.exports = function(errorMsg = '') {
       padding: 10px 14px;
       border-radius: 12px;
       font-size: 13.5px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .form-label {
@@ -145,12 +150,11 @@ module.exports = function(errorMsg = '') {
       color: #64748b;
       font-size: 15px;
       pointer-events: none;
-      transition: color 0.2s ease;
     }
 
     .form-input, .form-select {
       width: 100%;
-      background: rgba(30, 41, 59, 0.6);
+      background: rgba(30, 41, 59, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: #ffffff;
       padding: 12px 14px 12px 42px;
@@ -176,19 +180,15 @@ module.exports = function(errorMsg = '') {
     .form-input:focus, .form-select:focus {
       border-color: #10b981;
       box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-      background: rgba(30, 41, 59, 0.85);
-    }
-
-    .form-input:focus ~ i.field-icon {
-      color: #10b981;
+      background: rgba(30, 41, 59, 0.9);
     }
 
     .options-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: -6px;
-      margin-bottom: 24px;
+      margin-top: -4px;
+      margin-bottom: 22px;
     }
 
     .checkbox-container {
@@ -233,8 +233,8 @@ module.exports = function(errorMsg = '') {
 
     .card-footer {
       text-align: center;
-      margin-top: 24px;
-      padding-top: 20px;
+      margin-top: 22px;
+      padding-top: 18px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       color: #94a3b8;
       font-size: 13.5px;
@@ -270,11 +270,7 @@ module.exports = function(errorMsg = '') {
       <p>Sign in to continue your learning journey</p>
     </div>
 
-    ${errorMsg ? \`
-      <div class="error-banner">
-        <i class="fa-solid fa-circle-exclamation"></i> \${errorMsg}
-      </div>
-    \` : ''}
+    ` + errorHtml + `
 
     <form action="/login" method="POST">
       <div class="form-group">
@@ -325,11 +321,10 @@ module.exports = function(errorMsg = '') {
 
   <script>
     function togglePassword() {
-      const field = document.getElementById('loginPassword');
+      var field = document.getElementById('loginPassword');
       field.type = field.type === 'password' ? 'text' : 'password';
     }
   </script>
 </body>
-</html>
-  `;
+</html>`;
 };

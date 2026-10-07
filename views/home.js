@@ -1,11 +1,16 @@
-module.exports = function () {
-  return `
-<!DOCTYPE html>
+module.exports = function(errorMsg) {
+  const errorHtml = errorMsg ? (
+    '<div class="error-banner">' +
+      '<i class="fa-solid fa-circle-exclamation"></i> ' + errorMsg +
+    '</div>'
+  ) : '';
+
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SkillVerse - Learn & Grow</title>
+  <title>Login - SkillVerse</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -19,450 +24,307 @@ module.exports = function () {
     body {
       background-color: #06080e;
       color: #f8fafc;
-      overflow-x: hidden;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 20%, rgba(6, 182, 212, 0.16) 0%, transparent 45%),
-        radial-gradient(circle at 50% 85%, rgba(99, 102, 241, 0.12) 0%, transparent 50%);
+        radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.16) 0%, transparent 45%);
       background-attachment: fixed;
     }
 
-    /* Navbar */
-    .navbar {
-      height: 74px;
-      padding: 0 6%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(11, 15, 25, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    .brand-header {
+      margin-bottom: 24px;
+      text-align: center;
     }
 
     .brand-logo {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
       background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      display: flex;
+      text-decoration: none;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      text-decoration: none;
-      letter-spacing: -0.5px;
     }
+
     .brand-logo i {
       -webkit-text-fill-color: initial;
       color: #10b981;
     }
 
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .nav-link {
-      color: #94a3b8;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14.5px;
-      transition: color 0.2s ease;
-    }
-    .nav-link:hover, .nav-link.active {
-      color: #ffffff;
-    }
-
-    .btn-signup {
-      background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
-      color: #ffffff;
-      padding: 9px 24px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
-      transition: all 0.25s ease;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    .btn-signup:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(6, 182, 212, 0.45);
-    }
-
-    /* Hero Section */
-    .hero-container {
-      position: relative;
-      height: 380px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 20px;
-      overflow: hidden;
-    }
-
-    .hero-bg-overlay {
-      position: absolute;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600') center/cover no-repeat;
-      filter: brightness(0.22);
-      z-index: 1;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 820px;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      color: #34d399;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 18px;
-      backdrop-filter: blur(10px);
-    }
-
-    .hero-title {
-      font-size: 44px;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -1px;
-      margin-bottom: 14px;
-      background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      color: #94a3b8;
-      font-size: 16.5px;
-      font-weight: 500;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* Floating Feature Ribbon */
-    .feature-ribbon-wrapper {
-      max-width: 1040px;
-      margin: -45px auto 60px auto;
-      padding: 0 20px;
-      position: relative;
-      z-index: 10;
-    }
-
-    .feature-ribbon {
+    .auth-card {
       background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 26px 34px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .ribbon-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 8px 12px;
-    }
-
-    .ribbon-item:not(:last-child) {
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .ribbon-icon-box {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .icon-blue {
-      background: rgba(6, 182, 212, 0.14);
-      color: #22d3ee;
-      border: 1px solid rgba(6, 182, 212, 0.3);
-    }
-    .icon-green {
-      background: rgba(16, 185, 129, 0.14);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-    .icon-orange {
-      background: rgba(245, 158, 11, 0.14);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    .ribbon-text h4 {
-      font-size: 15.5px;
-      font-weight: 700;
-      color: #f1f5f9;
-      margin-bottom: 3px;
-    }
-
-    .ribbon-text p {
-      font-size: 13px;
-      color: #94a3b8;
-      font-weight: 500;
-    }
-
-    /* Section Header */
-    .section-container {
-      max-width: 1040px;
-      margin: 0 auto 90px auto;
-      padding: 0 20px;
-      text-align: center;
-    }
-
-    .section-title {
-      font-size: 34px;
-      font-weight: 800;
-      letter-spacing: -0.6px;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .section-description {
-      color: #94a3b8;
-      font-size: 15px;
-      max-width: 640px;
-      margin: 0 auto 45px auto;
-      line-height: 1.6;
-    }
-
-    /* Comparison Cards */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 28px;
-      text-align: left;
-    }
-
-    .role-card {
-      background: rgba(15, 23, 42, 0.55);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 22px;
-      padding: 38px 34px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 440px;
+      padding: 36px 32px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
       position: relative;
-      overflow: hidden;
     }
 
-    .role-card::before {
+    .auth-card::before {
       content: '';
       position: absolute;
       top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: transparent;
-      transition: background 0.3s ease;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #10b981, #06b6d4, transparent);
     }
 
-    .role-card.learners:hover::before {
-      background: linear-gradient(90deg, #0284c7, #38bdf8);
+    .card-top {
+      text-align: center;
+      margin-bottom: 24px;
     }
 
-    .role-card.instructors:hover::before {
-      background: linear-gradient(90deg, #059669, #34d399);
-    }
-
-    .role-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
-    }
-
-    .role-icon-box {
-      width: 58px;
-      height: 58px;
+    .icon-badge {
+      width: 54px;
+      height: 54px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
       border-radius: 16px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
-      margin-bottom: 22px;
+      font-size: 24px;
+      margin-bottom: 12px;
     }
 
-    .role-title {
-      font-size: 22px;
+    .card-top h2 {
+      font-size: 24px;
       font-weight: 800;
       color: #ffffff;
-      margin-bottom: 10px;
+      letter-spacing: -0.5px;
     }
 
-    .role-desc {
+    .card-top p {
       color: #94a3b8;
-      font-size: 14.5px;
-      line-height: 1.6;
-      margin-bottom: 22px;
+      font-size: 14px;
+      margin-top: 4px;
     }
 
-    .role-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .role-features li {
+    .error-banner {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: #cbd5e1;
-      font-size: 14px;
-      font-weight: 500;
+      gap: 8px;
     }
 
-    .role-features li i {
-      color: #10b981;
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      color: #cbd5e1;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i.field-icon {
+      position: absolute;
+      left: 14px;
+      color: #64748b;
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 12px 14px 12px 42px;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .select-arrow {
+      position: absolute;
+      right: 14px;
+      color: #64748b;
+      pointer-events: none;
       font-size: 13px;
     }
 
-    @media (max-width: 868px) {
-      .feature-ribbon {
-        grid-template-columns: 1fr;
-      }
-      .ribbon-item:not(:last-child) {
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding-bottom: 16px;
-      }
-      .cards-grid {
-        grid-template-columns: 1fr;
-      }
-      .hero-title {
-        font-size: 32px;
-      }
+    .form-input:focus, .form-select:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+      background: rgba(30, 41, 59, 0.9);
+    }
+
+    .options-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: -4px;
+      margin-bottom: 22px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: #94a3b8;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .checkbox-container input {
+      accent-color: #10b981;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+      color: #ffffff;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(6, 182, 212, 0.45);
+    }
+
+    .card-footer {
+      text-align: center;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      font-size: 13.5px;
+    }
+
+    .card-footer a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .card-footer a:hover {
+      color: #7dd3fc;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <header class="navbar">
+  <div class="brand-header">
     <a href="/" class="brand-logo">
       <i class="fa-solid fa-graduation-cap"></i> SkillVerse
     </a>
-    <nav class="nav-actions">
-      <a href="/" class="nav-link active">Home</a>
-      <a href="/login" class="nav-link">Login</a>
-      <a href="/signup" class="btn-signup">Sign Up</a>
-    </nav>
-  </header>
+  </div>
 
-  <!-- Hero Section -->
-  <section class="hero-container">
-    <div class="hero-bg-overlay"></div>
-    <div class="hero-content">
-      <span class="hero-badge">
-        <i class="fa-solid fa-sparkles"></i> Next-Gen Learning Platform
-      </span>
-      <h1 class="hero-title">Empower Your Future with Industry Skills</h1>
-      <p class="hero-subtitle">Interactive courses, hands-on chapter resources, and direct guidance designed to build real-world confidence.</p>
+  <div class="auth-card">
+    <div class="card-top">
+      <div class="icon-badge">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to continue your learning journey</p>
     </div>
-  </section>
 
-  <!-- Floating Feature Ribbon -->
-  <div class="feature-ribbon-wrapper">
-    <div class="feature-ribbon">
-      <div class="ribbon-item">
-        <div class="ribbon-icon-box icon-blue">
-          <i class="fa-solid fa-book-open"></i>
-        </div>
-        <div class="ribbon-text">
-          <h4>All Free Courses</h4>
-          <p>No subscription or hidden fees</p>
+    ` + errorHtml + `
+
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label class="form-label">Username / Email</label>
+        <div class="input-wrapper">
+          <input type="text" name="username" class="form-input" placeholder="Enter username or email" required>
+          <i class="fa-solid fa-user field-icon"></i>
         </div>
       </div>
-      <div class="ribbon-item">
-        <div class="ribbon-icon-box icon-green">
-          <i class="fa-solid fa-chalkboard-user"></i>
-        </div>
-        <div class="ribbon-text">
-          <h4>Expert Guidance</h4>
-          <p>Structured lessons & exercises</p>
-        </div>
-      </div>
-      <div class="ribbon-item">
-        <div class="ribbon-icon-box icon-orange">
-          <i class="fa-solid fa-chart-line"></i>
-        </div>
-        <div class="ribbon-text">
-          <h4>Skill Progress</h4>
-          <p>Track your personal growth</p>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="loginPassword" name="password" class="form-input" placeholder="Enter password" required>
+          <i class="fa-solid fa-lock field-icon"></i>
         </div>
       </div>
+
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <div class="input-wrapper">
+          <select name="role" class="form-select" required>
+            <option value="Student">Student</option>
+            <option value="Instructor">Instructor</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <i class="fa-solid fa-id-badge field-icon"></i>
+          <i class="fa-solid fa-chevron-down select-arrow"></i>
+        </div>
+      </div>
+
+      <div class="options-row">
+        <label class="checkbox-container">
+          <input type="checkbox" onclick="togglePassword()"> Show Password
+        </label>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <span>Sign In</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <div class="card-footer">
+      Don't have an account? <a href="/signup">Sign Up</a> | <a href="/">Home</a>
     </div>
   </div>
 
-  <!-- Why Choose Section -->
-  <section class="section-container">
-    <h2 class="section-title">Why Choose SkillVerse?</h2>
-    <p class="section-description">
-      Where knowledge meets accessibility. Our platform provides interactive tools for learners and instructors to build a solid foundation.
-    </p>
-
-    <!-- Cards Grid -->
-    <div class="cards-grid">
-      <!-- Learners Card -->
-      <div class="role-card learners">
-        <div class="role-icon-box icon-blue">
-          <i class="fa-solid fa-graduation-cap"></i>
-        </div>
-        <h3 class="role-title">For Learners</h3>
-        <p class="role-desc">Step into structured roadmaps, video lessons, and interactive chapter quizzes built to accelerate your tech career.</p>
-        <ul class="role-features">
-          <li><i class="fa-solid fa-check"></i> High-definition video lectures</li>
-          <li><i class="fa-solid fa-check"></i> Chapter-wise progress tracking</li>
-          <li><i class="fa-solid fa-check"></i> Completely free resource access</li>
-        </ul>
-      </div>
-
-      <!-- Instructors Card -->
-      <div class="role-card instructors">
-        <div class="role-icon-box icon-green">
-          <i class="fa-solid fa-users-gear"></i>
-        </div>
-        <h3 class="role-title">For Instructors</h3>
-        <p class="role-desc">Effortlessly design courses, organize syllabus modules, upload video content, and mentor students worldwide.</p>
-        <ul class="role-features">
-          <li><i class="fa-solid fa-check"></i> Intuitive course & chapter builder</li>
-          <li><i class="fa-solid fa-check"></i> Rich markdown & video content editor</li>
-          <li><i class="fa-solid fa-check"></i> Dedicated instructor profile analytics</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
+  <script>
+    function togglePassword() {
+      var field = document.getElementById('loginPassword');
+      field.type = field.type === 'password' ? 'text' : 'password';
+    }
+  </script>
 </body>
-</html>
-  `;
+</html>`;
 };

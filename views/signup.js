@@ -1,49 +1,124 @@
-module.exports = function(errorMessage = '') {
-  return `
-<!DOCTYPE html>
+module.exports = function(errorMsg) {
+  const errorHtml = errorMsg ? (
+    '<div class="error-banner">' +
+      '<i class="fa-solid fa-circle-exclamation"></i> ' + errorMsg +
+    '</div>'
+  ) : '';
+
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up - SkillVerse</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
-    body { background-color: #121826; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 15px; }
-    
-    .signup-card {
-      background: white;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 520px;
-      padding: 40px 38px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.35);
-      position: relative;
-      border-top: 5px solid #6366f1;
-    }
-    
-    .title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #1e293b;
-      text-align: center;
-      margin-bottom: 4px;
-    }
-    
-    .subtitle {
-      color: #64748b;
-      font-size: 13.5px;
-      text-align: center;
-      margin-bottom: 25px;
-      font-weight: 500;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
-    .alert-danger {
-      background-color: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-      padding: 11px 14px;
-      border-radius: 8px;
+    body {
+      background-color: #06080e;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.16) 0%, transparent 45%);
+      background-attachment: fixed;
+    }
+
+    .brand-header {
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    .brand-logo {
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo i {
+      -webkit-text-fill-color: initial;
+      color: #10b981;
+    }
+
+    .auth-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 580px;
+      padding: 36px 34px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #10b981, #06b6d4, transparent);
+    }
+
+    .card-top {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .icon-badge {
+      width: 52px;
+      height: 52px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .card-top h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .card-top p {
+      color: #94a3b8;
+      font-size: 13.5px;
+      margin-top: 4px;
+    }
+
+    .error-banner {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      padding: 10px 14px;
+      border-radius: 12px;
       font-size: 13.5px;
       margin-bottom: 20px;
       display: flex;
@@ -51,183 +126,269 @@ module.exports = function(errorMessage = '') {
       gap: 8px;
     }
 
-    .form-group {
-      margin-bottom: 18px;
+    /* Form Layout */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
     }
-    
-    label {
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .form-label {
       display: block;
+      color: #cbd5e1;
       font-size: 13px;
       font-weight: 600;
-      color: #334155;
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
-    
-    .form-control {
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i.field-icon {
+      position: absolute;
+      left: 14px;
+      color: #64748b;
+      font-size: 14px;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    .form-input, .form-select {
       width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 14.5px;
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 11px 14px 11px 40px;
+      border-radius: 12px;
+      font-size: 13.5px;
       outline: none;
-      background: #f8fafc;
-      color: #1e293b;
       transition: all 0.2s ease;
     }
-    
-    .form-control::placeholder {
-      color: #94a3b8;
+
+    .form-input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+      opacity: 0.6;
     }
-    
-    .form-control:focus {
-      background: #fff;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+
+    .form-select {
+      appearance: none;
+      cursor: pointer;
     }
-    
-    .checkbox-group {
+
+    .select-arrow {
+      position: absolute;
+      right: 14px;
+      color: #64748b;
+      pointer-events: none;
+      font-size: 13px;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+      background: rgba(30, 41, 59, 0.9);
+    }
+
+    .form-input:focus ~ i.field-icon {
+      color: #10b981;
+    }
+
+    .options-row {
+      margin-top: 4px;
+      margin-bottom: 22px;
+    }
+
+    .checkbox-container {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 13.5px;
-      color: #64748b;
-      margin-top: -6px;
-      margin-bottom: 18px;
-    }
-    
-    .checkbox-group input {
       cursor: pointer;
-      accent-color: #6366f1;
+      color: #94a3b8;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .checkbox-container input {
+      accent-color: #10b981;
       width: 15px;
       height: 15px;
+      cursor: pointer;
     }
 
-    .btn-signup {
+    .btn-submit {
       width: 100%;
-      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-      color: white;
-      border: none;
+      background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+      color: #ffffff;
       padding: 13px;
-      border-radius: 8px;
-      font-size: 15.5px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 10px;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
-      transition: opacity 0.2s;
-    }
-    
-    .btn-signup:hover {
-      opacity: 0.95;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    .bottom-links {
-      margin-top: 22px;
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(6, 182, 212, 0.45);
+    }
+
+    .card-footer {
       text-align: center;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
       font-size: 13.5px;
-      color: #64748b;
     }
-    
-    .bottom-links a {
-      color: #4f46e5;
-      font-weight: 700;
+
+    .card-footer a {
+      color: #38bdf8;
       text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
     }
-    
-    .bottom-links a:hover {
+
+    .card-footer a:hover {
+      color: #7dd3fc;
       text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full-width {
+        grid-column: span 1;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="signup-card">
-    <h1 class="title">Create New Account</h1>
-    <p class="subtitle">Enter your details to register on SkillVerse</p>
 
-    ${errorMessage ? `
-      <div class="alert-danger">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <span>${errorMessage}</span>
+  <div class="brand-header">
+    <a href="/" class="brand-logo">
+      <i class="fa-solid fa-graduation-cap"></i> SkillVerse
+    </a>
+  </div>
+
+  <div class="auth-card">
+    <div class="card-top">
+      <div class="icon-badge">
+        <i class="fa-solid fa-user-plus"></i>
       </div>
-    ` : ''}
+      <h2>Create New Account</h2>
+      <p>Enter your details to register on SkillVerse</p>
+    </div>
+
+    ` + errorHtml + `
 
     <form action="/signup" method="POST">
-      <!-- 1. First Name -->
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <div class="input-wrapper">
+            <input type="text" name="firstName" class="form-input" placeholder="First name" required>
+            <i class="fa-solid fa-user field-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <div class="input-wrapper">
+            <input type="text" name="lastName" class="form-input" placeholder="Last name" required>
+            <i class="fa-solid fa-user-tag field-icon"></i>
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
-        <label>First Name</label>
-        <input type="text" name="firstName" class="form-control" placeholder="First name" required>
+        <label class="form-label">Email Address</label>
+        <div class="input-wrapper">
+          <input type="email" name="email" class="form-input" placeholder="name@domain.com" required>
+          <i class="fa-solid fa-envelope field-icon"></i>
+        </div>
       </div>
 
-      <!-- 2. Last Name -->
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Birth Date</label>
+          <div class="input-wrapper">
+            <input type="date" name="dob" class="form-input" required>
+            <i class="fa-solid fa-calendar field-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <div class="input-wrapper">
+            <select name="role" class="form-select" required>
+              <option value="Student">Student</option>
+              <option value="Instructor">Instructor</option>
+            </select>
+            <i class="fa-solid fa-id-badge field-icon"></i>
+            <i class="fa-solid fa-chevron-down select-arrow"></i>
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
-        <label>Last Name</label>
-        <input type="text" name="lastName" class="form-control" placeholder="Last name" required>
+        <label class="form-label">Username</label>
+        <div class="input-wrapper">
+          <input type="text" name="username" class="form-input" placeholder="Choose a unique username" required>
+          <i class="fa-solid fa-at field-icon"></i>
+        </div>
       </div>
 
-      <!-- 3. Email Address -->
       <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" name="email" class="form-control" placeholder="Email address" required>
+        <label class="form-label">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="signupPassword" name="password" class="form-input" placeholder="Create strong password" required>
+          <i class="fa-solid fa-lock field-icon"></i>
+        </div>
       </div>
 
-      <!-- 4. Birth Day -->
-      <div class="form-group">
-        <label>Birth Day</label>
-        <input type="date" name="dob" class="form-control" required>
+      <div class="options-row">
+        <label class="checkbox-container">
+          <input type="checkbox" onclick="togglePassword()"> Show Password
+        </label>
       </div>
 
-      <!-- 5. Username -->
-      <div class="form-group">
-        <label>Username</label>
-        <input type="text" name="username" class="form-control" placeholder="Username" required>
-      </div>
-
-      <!-- 6. New Password -->
-      <div class="form-group">
-        <label>New Password</label>
-        <input type="password" id="pwd" name="password" class="form-control" placeholder="New Password" required>
-      </div>
-
-      <!-- 7. Confirm Password -->
-      <div class="form-group">
-        <label>Confirm Password</label>
-        <input type="password" id="cpwd" name="confirmPassword" class="form-control" placeholder="Confirm Password" required>
-      </div>
-
-      <!-- Show Password Checkbox -->
-      <div class="checkbox-group">
-        <input type="checkbox" id="showPass" onclick="togglePass()">
-        <label for="showPass" style="margin-bottom:0; cursor:pointer; font-weight:normal; color:#64748b;">Show Password</label>
-      </div>
-
-      <!-- 8. Role Selection -->
-      <div class="form-group">
-        <label>Role</label>
-        <select name="role" class="form-control" required style="cursor:pointer;">
-          <option value="student">Student</option>
-          <option value="instructor">Instructor</option>
-        </select>
-      </div>
-
-      <!-- Submit Button -->
-      <button type="submit" class="btn-signup">Sign Up</button>
+      <button type="submit" class="btn-submit">
+        <span>Create Account</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
     </form>
 
-    <div class="bottom-links">
-      Already have an account? <a href="/login">Login here</a> | <a href="/" style="color:#64748b; font-weight:normal;">Home</a>
+    <div class="card-footer">
+      Already have an account? <a href="/login">Sign In</a> | <a href="/">Home</a>
     </div>
   </div>
 
   <script>
-    function togglePass() {
-      const p1 = document.getElementById('pwd');
-      const p2 = document.getElementById('cpwd');
-      const type = p1.type === 'password' ? 'text' : 'password';
-      p1.type = type;
-      p2.type = type;
+    function togglePassword() {
+      var field = document.getElementById('signupPassword');
+      field.type = field.type === 'password' ? 'text' : 'password';
     }
   </script>
 </body>
-</html>
-  `;
+</html>`;
 };
