@@ -1,313 +1,466 @@
-module.exports = function(courses) {
+module.exports = function () {
   return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SkillVerse - Learn & Grow Online</title>
+  <title>SkillVerse - Learn & Grow</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
     body {
-      background-color: #f8fafc;
-      color: #333333;
+      background-color: #06080e;
+      color: #f8fafc;
       overflow-x: hidden;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(6, 182, 212, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(99, 102, 241, 0.12) 0%, transparent 50%);
+      background-attachment: fixed;
     }
 
-    /* 1. Black Top Navbar */
-    .header-nav {
-      background-color: #1a1e24;
-      height: 68px;
+    /* Navbar */
+    .navbar {
+      height: 74px;
+      padding: 0 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(11, 15, 25, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .brand-logo {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 60px;
-    }
-    .brand-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #ffffff;
+      gap: 10px;
       text-decoration: none;
       letter-spacing: -0.5px;
     }
-    .nav-right-group {
+    .brand-logo i {
+      -webkit-text-fill-color: initial;
+      color: #10b981;
+    }
+
+    .nav-actions {
       display: flex;
       align-items: center;
-      gap: 25px;
+      gap: 24px;
     }
-    .nav-right-group a {
-      color: #cbd5e1;
+
+    .nav-link {
+      color: #94a3b8;
       text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: color 0.2s;
+      font-weight: 600;
+      font-size: 14.5px;
+      transition: color 0.2s ease;
     }
-    .nav-right-group a:hover {
+    .nav-link:hover, .nav-link.active {
       color: #ffffff;
     }
-    .btn-signup-pill {
-      background-color: #007bff;
-      color: #ffffff !important;
-      padding: 8px 22px;
-      border-radius: 6px;
+
+    .btn-signup {
+      background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+      color: #ffffff;
+      padding: 9px 24px;
+      border-radius: 12px;
+      text-decoration: none;
       font-weight: 700;
-      font-size: 14.5px;
+      font-size: 14px;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .btn-signup:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(6, 182, 212, 0.45);
     }
 
-    /* 2. Hero Background Banner */
-    .hero-banner {
-      background: linear-gradient(rgba(18, 24, 38, 0.85), rgba(18, 24, 38, 0.85)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      height: 180px;
+    /* Hero Section */
+    .hero-container {
       position: relative;
-      border-bottom: 3px solid #007bff;
+      height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      overflow: hidden;
     }
 
-    /* 3. Floating 3-Column White Highlight Card */
-    .highlight-card-wrapper {
-      max-width: 1050px;
-      margin: -45px auto 50px;
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600') center/cover no-repeat;
+      filter: brightness(0.22);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-title {
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+      background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: #94a3b8;
+      font-size: 16.5px;
+      font-weight: 500;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Floating Feature Ribbon */
+    .feature-ribbon-wrapper {
+      max-width: 1040px;
+      margin: -45px auto 60px auto;
+      padding: 0 20px;
       position: relative;
       z-index: 10;
-      padding: 0 20px;
     }
-    .highlight-card {
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+    .feature-ribbon {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 26px 34px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      padding: 24px 10px;
-      text-align: center;
-      border: 1px solid #e2e8f0;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
-    .highlight-col {
-      padding: 0 20px;
+
+    .ribbon-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 12px;
     }
-    .highlight-col:not(:last-child) {
-      border-right: 1px solid #e2e8f0;
+
+    .ribbon-item:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .highlight-title {
-      font-size: 16.5px;
-      font-weight: 700;
+
+    .ribbon-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-    .text-blue { color: #007bff; }
-    .text-green { color: #198754; }
-    .text-yellow { color: #ffc107; }
-    
-    .highlight-desc {
-      font-size: 13.5px;
-      color: #64748b;
+      font-size: 20px;
+      flex-shrink: 0;
     }
 
-    /* 4. "Why Choose SkillVerse?" Section */
-    .section-intro {
-      text-align: center;
-      max-width: 800px;
-      margin: 0 auto 45px;
-      padding: 0 20px;
+    .icon-blue {
+      background: rgba(6, 182, 212, 0.14);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.3);
     }
-    .section-intro h2 {
+    .icon-green {
+      background: rgba(16, 185, 129, 0.14);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .icon-orange {
+      background: rgba(245, 158, 11, 0.14);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .ribbon-text h4 {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 3px;
+    }
+
+    .ribbon-text p {
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Section Header */
+    .section-container {
+      max-width: 1040px;
+      margin: 0 auto 90px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .section-title {
       font-size: 34px;
       font-weight: 800;
-      color: #007bff;
+      letter-spacing: -0.6px;
       margin-bottom: 12px;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .section-intro p {
-      font-size: 15.5px;
-      color: #64748b;
+
+    .section-description {
+      color: #94a3b8;
+      font-size: 15px;
+      max-width: 640px;
+      margin: 0 auto 45px auto;
       line-height: 1.6;
     }
 
-    /* 5. Lower Double Card Grid */
-    .container {
-      max-width: 1050px;
-      margin: 0 auto 60px;
-      padding: 0 20px;
-    }
-    .overview-grid {
+    /* Comparison Cards */
+    .cards-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      margin-bottom: 50px;
-    }
-    .overview-card {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 35px 30px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-      border: 1px solid #edf2f7;
-    }
-    .overview-icon {
-      font-size: 36px;
-      margin-bottom: 15px;
-    }
-    .overview-card h3 {
-      font-size: 22px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 14px;
-    }
-    .overview-card p {
-      font-size: 14.5px;
-      color: #64748b;
-      line-height: 1.6;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      text-align: left;
     }
 
-    /* 6. Courses Grid */
-    .courses-heading {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 22px;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 10px;
+    .role-card {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 22px;
+      padding: 38px 34px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
-    .courses-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 22px;
+
+    .role-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      transition: background 0.3s ease;
     }
-    .course-card {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 22px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+
+    .role-card.learners:hover::before {
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
     }
-    .course-card h4 {
-      font-size: 18px;
-      color: #1e293b;
-      font-weight: 700;
-      margin-bottom: 6px;
+
+    .role-card.instructors:hover::before {
+      background: linear-gradient(90deg, #059669, #34d399);
     }
-    .card-footer {
+
+    .role-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .role-icon-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid #f1f5f9;
-      padding-top: 15px;
-      margin-top: 15px;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 22px;
     }
-    .course-price {
-      font-size: 18px;
-      font-weight: 700;
-      color: #007bff;
+
+    .role-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 10px;
     }
-    .btn-enroll {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 7px 16px;
-      border-radius: 4px;
-      font-weight: 600;
-      cursor: pointer;
+
+    .role-desc {
+      color: #94a3b8;
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .role-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .role-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .role-features li i {
+      color: #10b981;
+      font-size: 13px;
+    }
+
+    @media (max-width: 868px) {
+      .feature-ribbon {
+        grid-template-columns: 1fr;
+      }
+      .ribbon-item:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 16px;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-title {
+        font-size: 32px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Dark Navbar -->
-  <header class="header-nav">
-    <a href="/" class="brand-title">SkillVerse</a>
-    <div class="nav-right-group">
-      <a href="/">Home</a>
-      <a href="/login">Login</a>
-      <a href="/login" class="btn-signup-pill">Sign Up</a>
-    </div>
+  <!-- Navbar -->
+  <header class="navbar">
+    <a href="/" class="brand-logo">
+      <i class="fa-solid fa-graduation-cap"></i> SkillVerse
+    </a>
+    <nav class="nav-actions">
+      <a href="/" class="nav-link active">Home</a>
+      <a href="/login" class="nav-link">Login</a>
+      <a href="/signup" class="btn-signup">Sign Up</a>
+    </nav>
   </header>
 
-  <!-- Hero Banner Strip -->
-  <section class="hero-banner"></section>
+  <!-- Hero Section -->
+  <section class="hero-container">
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-badge">
+        <i class="fa-solid fa-sparkles"></i> Next-Gen Learning Platform
+      </span>
+      <h1 class="hero-title">Empower Your Future with Industry Skills</h1>
+      <p class="hero-subtitle">Interactive courses, hands-on chapter resources, and direct guidance designed to build real-world confidence.</p>
+    </div>
+  </section>
 
-  <!-- Floating 3-Column Box (PHP Exact Match) -->
-  <div class="highlight-card-wrapper">
-    <div class="highlight-card">
-      <div class="highlight-col">
-        <div class="highlight-title text-blue">
-          <i class="fa-solid fa-book-open"></i> All Free Courses
+  <!-- Floating Feature Ribbon -->
+  <div class="feature-ribbon-wrapper">
+    <div class="feature-ribbon">
+      <div class="ribbon-item">
+        <div class="ribbon-icon-box icon-blue">
+          <i class="fa-solid fa-book-open"></i>
         </div>
-        <div class="highlight-desc">No Subscription or Hidden Fees</div>
+        <div class="ribbon-text">
+          <h4>All Free Courses</h4>
+          <p>No subscription or hidden fees</p>
+        </div>
       </div>
-      
-      <div class="highlight-col">
-        <div class="highlight-title text-green">
-          <i class="fa-solid fa-chalkboard-user"></i> Expert Guidance
+      <div class="ribbon-item">
+        <div class="ribbon-icon-box icon-green">
+          <i class="fa-solid fa-chalkboard-user"></i>
         </div>
-        <div class="highlight-desc">Structured Lessons & Exercises</div>
+        <div class="ribbon-text">
+          <h4>Expert Guidance</h4>
+          <p>Structured lessons & exercises</p>
+        </div>
       </div>
-      
-      <div class="highlight-col">
-        <div class="highlight-title text-yellow">
-          <i class="fa-solid fa-certificate"></i> Skill Progress
+      <div class="ribbon-item">
+        <div class="ribbon-icon-box icon-orange">
+          <i class="fa-solid fa-chart-line"></i>
         </div>
-        <div class="highlight-desc">Track Your Personal Growth</div>
+        <div class="ribbon-text">
+          <h4>Skill Progress</h4>
+          <p>Track your personal growth</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- "Why Choose SkillVerse?" Centered Section -->
-  <section class="section-intro">
-    <h2>Why Choose SkillVerse?</h2>
-    <p>Where knowledge meets accessibility. Our platform provides interactive tools for learners and instructors to build a solid foundation.</p>
-  </section>
+  <!-- Why Choose Section -->
+  <section class="section-container">
+    <h2 class="section-title">Why Choose SkillVerse?</h2>
+    <p class="section-description">
+      Where knowledge meets accessibility. Our platform provides interactive tools for learners and instructors to build a solid foundation.
+    </p>
 
-  <!-- Lower Double Cards & Courses -->
-  <main class="container">
-    <div class="overview-grid">
-      <!-- For Learners Card -->
-      <div class="overview-card">
-        <div class="overview-icon text-blue">
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+      <!-- Learners Card -->
+      <div class="role-card learners">
+        <div class="role-icon-box icon-blue">
           <i class="fa-solid fa-graduation-cap"></i>
         </div>
-        <h3>For Learners</h3>
-        <p>Embark on your learning journey with ease. Browse through a diverse range of subjects, enroll instantly, and track your progress in real-time.</p>
+        <h3 class="role-title">For Learners</h3>
+        <p class="role-desc">Step into structured roadmaps, video lessons, and interactive chapter quizzes built to accelerate your tech career.</p>
+        <ul class="role-features">
+          <li><i class="fa-solid fa-check"></i> High-definition video lectures</li>
+          <li><i class="fa-solid fa-check"></i> Chapter-wise progress tracking</li>
+          <li><i class="fa-solid fa-check"></i> Completely free resource access</li>
+        </ul>
       </div>
 
-      <!-- For Instructors Card -->
-      <div class="overview-card">
-        <div class="overview-icon text-green">
-          <i class="fa-solid fa-chalkboard-user"></i>
+      <!-- Instructors Card -->
+      <div class="role-card instructors">
+        <div class="role-icon-box icon-green">
+          <i class="fa-solid fa-users-gear"></i>
         </div>
-        <h3>For Instructors</h3>
-        <p>Shape the future of education by creating captivating courses. Utilize intuitive tools for content creation, quiz management, and student feedback.</p>
+        <h3 class="role-title">For Instructors</h3>
+        <p class="role-desc">Effortlessly design courses, organize syllabus modules, upload video content, and mentor students worldwide.</p>
+        <ul class="role-features">
+          <li><i class="fa-solid fa-check"></i> Intuitive course & chapter builder</li>
+          <li><i class="fa-solid fa-check"></i> Rich markdown & video content editor</li>
+          <li><i class="fa-solid fa-check"></i> Dedicated instructor profile analytics</li>
+        </ul>
       </div>
     </div>
-
-    <!-- Available Courses Grid -->
-    <h3 class="courses-heading">Available Courses</h3>
-    <div class="courses-grid">
-      ${courses && courses.length > 0 ? courses.map(c => `
-        <div class="course-card">
-          <div>
-            <h4>${c.title}</h4>
-            <p style="font-size: 13.5px; color: #64748b; margin-bottom: 8px;">Instructor: ${c.instructor}</p>
-            <p style="font-size: 14px; color: #475569;">${c.description || ''}</p>
-          </div>
-          <div class="card-footer">
-            <span class="course-price">₹${c.price}</span>
-            <button class="btn-enroll">Enroll Now</button>
-          </div>
-        </div>
-      `).join('') : '<p style="color: #64748b;">No courses available right now.</p>'}
-    </div>
-  </main>
+  </section>
 
 </body>
 </html>
