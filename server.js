@@ -2,41 +2,55 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const session = require('express-session');
+const path = require('path');
 
 dotenv.config();
 const app = express();
 
+// ==========================================
+// 1. MIDDLEWARES
+// ==========================================
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Session Middleware (PHP ke session_start() jaisa)
+// Session Middleware
 app.use(session({
   secret: 'skillverse_secret_key_12345',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 din tak login rahega
+  cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 day
 }));
 
-// Models
+// ==========================================
+// 2. MODELS IMPORT
+// ==========================================
 const Course = require('./models/Course');
 const User = require('./models/User');
 
-// Landing Views
+// ==========================================
+// 3. VIEWS IMPORT
+// ==========================================
 const renderHome = require('./views/home.js');
 const renderLogin = require('./views/login.js');
 const renderSignup = require('./views/signup.js');
 
-// Modular Portals
+// ==========================================
+// 4. MODULAR PORTALS ROUTING
+// ==========================================
 const adminRoutes = require('./admin/backend/adminRoutes.js');
 const instructorRoutes = require('./instructor/backend/instructorRoutes.js');
 const studentRoutes = require('./student/backend/studentRoutes.js');
 
-// Mount Portals
 app.use('/admin', adminRoutes);
 app.use('/instructor', instructorRoutes);
 app.use('/student', studentRoutes);
 
-// Home Route
+// ==========================================
+// 5. CORE APPLICATION ROUTES
+// ==========================================
+
+// --- Home Route ---
 app.get('/', async (req, res) => {
   try {
     const courses = await Course.find();
@@ -46,20 +60,13 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Login Page
-app.get('/login', (req, res) => {
-  const successMsg = req.query.success || '';
-  const errorMsg = req.query.error || '';
-  res.send(renderLogin(errorMsg, successMsg));
-});
-
-// Signup Page
+// --- Sign Up (GET) ---
 app.get('/signup', (req, res) => {
   const errorMsg = req.query.error || '';
   res.send(renderSignup(errorMsg));
 });
 
-// POST /signup (Dynamic User Save + Auto Session Set)
+// --- Sign Up Action (POST) ---
 app.post('/signup', async (req, res) => {
   try {
     const { firstName, lastName, email, dob, username, password, confirmPassword, role } = req.body;
@@ -70,8 +77,9 @@ app.post('/signup', async (req, res) => {
 
     const cleanUser = (username || '').trim().toLowerCase();
     const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanRole = (role || 'student').trim().toLowerCase();
 
-    // Check duplicate
+    // Check duplicate username or email
     const existingUser = await User.findOne({
       $or: [{ username: cleanUser }, { email: cleanEmail }]
     });
@@ -80,60 +88,59 @@ app.post('/signup', async (req, res) => {
       return res.redirect('/signup?error=Username+or+Email+already+registered!');
     }
 
-    // Insert new user into MongoDB
-    const newUser = await User.create({
-      firstName: (firstName || '').trim(),
-      lastName: (lastName || '').trim(),
+    await User.create({
       name: `${firstName || ''} ${lastName || ''}`.trim(),
       email: cleanEmail,
       dob: dob || '',
       username: cleanUser,
       password: (password || '').trim(),
-      role: role || 'student',
+      role: cleanRole,
       status: 'Active'
     });
 
-    // Signup hote hi current user ka ID session me save
-    req.session.userId = newUser._id;
-    req.session.role = newUser.role;
+    console.log(`✅ New user registered: ${cleanUser} (${cleanRole})`);
 
-    if (newUser.role === 'student') {
-      return res.redirect('/student/profile');
-    } else {
-      return res.redirect('/instructor/courses');
-    }
+    // Signup bante hi login page bhej do success message ke sath
+    return res.redirect('/login?success=Account+created+successfully!+Please+sign+in.');
 
   } catch (err) {
-    console.error("Signup Error:", err);
+    console.error('Signup Error:', err);
     return res.redirect('/signup?error=' + encodeURIComponent(err.message));
   }
 });
 
-// Logout (Session Destroy)
-app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login?success=Logged+out+successfully!');
-  });
+// --- Login Page (GET) ---
+app.get('/login', (req, res) => {
+  const errorMsg = req.query.error || '';
+  const successMsg = req.query.success || '';
+  res.send(renderLogin(errorMsg, successMsg));
 });
 
-// POST /login (Session Set on Login)
+// --- Login Action (POST) - Fully Protected ---
 app.post('/login', async (req, res) => {
-  const { username, password, role } = req.body;
-  const cleanPass = (password || '').trim();
-
-  // 1. Admin Authentication
-  if (role === 'admin') {
-    if (username === 'admin' && cleanPass === 'admin458') {
-      req.session.role = 'admin';
-      return res.redirect('/admin/dashboard');
-    }
-    return res.redirect('/login?error=Invalid+Admin+Credentials!');
-  }
-
-  // 2. Instructor / Student Authentication
   try {
+    const { username, password, role } = req.body;
+    const cleanPass = (password || '').trim();
+    const selectedRole = (role || 'student').trim().toLowerCase();
     const cleanUser = (username || '').trim();
+
+    if (!cleanUser || !cleanPass) {
+      return res.redirect('/login?error=Please+enter+both+username+and+password');
+    }
+
+    // 1. Admin Authentication
+    if (selectedRole === 'admin') {
+      if (cleanUser === 'admin' && cleanPass === 'admin458') {
+        req.session.role = 'admin';
+        return res.redirect('/admin/dashboard');
+      } else {
+        return res.redirect('/login?error=Invalid+Admin+credentials!');
+      }
+    }
+
+    // 2. Instructor / Student Authentication (Case Insensitive Match)
     const userRegex = new RegExp(`^${cleanUser}$`, 'i');
+    const roleRegex = new RegExp(`^${selectedRole}$`, 'i');
 
     const user = await User.findOne({
       $or: [
@@ -141,14 +148,15 @@ app.post('/login', async (req, res) => {
         { email: userRegex },
         { name: userRegex }
       ],
-      role: role
+      role: roleRegex
     });
 
     if (!user) {
-      return res.redirect(`/login?error=No+${role}+account+found!`);
+      return res.redirect(`/login?error=No+${encodeURIComponent(role)}+account+found!`);
     }
 
-    if (user.password.trim() !== cleanPass) {
+    const dbPassword = (user.password || '').trim();
+    if (dbPassword !== cleanPass) {
       return res.redirect('/login?error=Incorrect+password!');
     }
 
@@ -156,32 +164,90 @@ app.post('/login', async (req, res) => {
       return res.redirect('/login?error=Account+is+currently+Inactive+or+Blocked!');
     }
 
-    // Login hone wale user ka ID session me save
+    // Set Sessions for both styles
     req.session.userId = user._id;
-    req.session.role = user.role;
+    req.session.role = (user.role || '').toLowerCase();
+    req.session.user = {
+      id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      role: user.role
+    };
 
-    if (role === 'instructor') {
+    console.log(`✅ Logged in successfully: ${user.username} as ${user.role}`);
+
+    if (selectedRole === 'instructor') {
       return res.redirect('/instructor/courses');
     } else {
       return res.redirect('/student/courses');
     }
 
   } catch (err) {
-    console.error("Login Error:", err);
+    console.error('❌ Detailed Login Error:', err);
     return res.redirect('/login?error=An+error+occurred+during+login.');
   }
 });
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/skillverse';
+// --- Logout ---
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/login?success=Logged+out+successfully!');
+  });
+});
+
+// ==========================================
+// 6. AUTO SEED DEFAULT ACCOUNTS
+// ==========================================
+async function seedDefaultUsers() {
+  try {
+    const adminExists = await User.findOne({ username: 'admin' });
+    if (!adminExists) {
+      await User.create({
+        name: 'Super Admin',
+        email: 'admin@skillverse.com',
+        dob: '2000-01-01',
+        username: 'admin',
+        password: 'admin458',
+        role: 'admin',
+        status: 'Active'
+      });
+      console.log('👑 Default Admin created: admin / admin458');
+    }
+
+    const instructorExists = await User.findOne({ username: 'instructor' });
+    if (!instructorExists) {
+      await User.create({
+        name: 'Lead Instructor',
+        email: 'instructor@skillverse.com',
+        dob: '1995-01-01',
+        username: 'instructor',
+        password: 'instructor123',
+        role: 'instructor',
+        status: 'Active'
+      });
+      console.log('👨‍🏫 Default Instructor created: instructor / instructor123');
+    }
+  } catch (err) {
+    console.error('Error seeding users:', err.message);
+  }
+}
+
+// ==========================================
+// 7. DATABASE & SERVER LAUNCH
+// ==========================================
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = 'mongodb+srv://parvevishal091_db_user:DsiljeI9bwGkJjYp@cluster0.nmp2h9d.mongodb.net/skillverse?retryWrites=true&w=majority&appName=Cluster0';
 
 app.listen(PORT, () => {
-  console.log(`========================================`);
+  console.log(`=================================`);
   console.log(`🚀 Server LIVE on http://localhost:${PORT}`);
-  console.log(`========================================`);
- const MONGO_URI = 'mongodb+srv://parvevishal091_db_user:DsiljeI9bwGkJjYp@cluster0.nmp2h9d.mongodb.net/skillverse?retryWrites=true&w=majority&appName=Cluster0';
-
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('✅ Connected to MongoDB Atlas Cloud!'))
-  .catch((err) => console.error('❌ MongoDB Atlas Connection Error:', err));
+  console.log(`=================================`);
 });
+
+mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 5000 })
+  .then(() => {
+    console.log('✅ Connected to MongoDB Atlas Cloud!');
+    seedDefaultUsers();
+  })
+  .catch((err) => console.error('❌ MongoDB Atlas Connection Error:', err.message));
